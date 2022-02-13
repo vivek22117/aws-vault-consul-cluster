@@ -20,5 +20,5 @@ resource "aws_dynamodb_table" "vault_backend_table" {
     prevent_destroy = false
   }
 
-  tags = merge(local.common_tags, tomap({"Name"= "${var.environment}-tfstate-db"}))
+  tags = merge(local.common_tags, tomap({"Name"= "${var.environment}-vault-consul-db"}))
 }
