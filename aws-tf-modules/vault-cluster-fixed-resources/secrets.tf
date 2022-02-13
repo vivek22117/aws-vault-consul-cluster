@@ -74,3 +74,40 @@ resource "tls_locally_signed_cert" "vault_node_cert" {
     command = "echo '${tls_locally_signed_cert.vault_node_cert.cert_pem}' > '${var.public_key_file_path}' && chmod ${var.permissions} '${var.public_key_file_path}' && chown ${var.owner} '${var.public_key_file_path}'"
   }
 }
+
+#############################################################################
+#           Add ACM certificate for Vault                                   #
+
+resource "aws_acm_certificate" "vault" {
+  private_key       = tls_private_key.vault_node_key.private_key_pem
+  certificate_body  = tls_locally_signed_cert.vault_node_cert.cert_pem
+  certificate_chain = tls_self_signed_cert.vault_ca_cert.cert_pem
+}
+
+#####==========================Generate Local variable for Certificate & Keys====================#####
+locals {
+  tls_data = {
+    vault_ca   = base64encode(tls_self_signed_cert.vault_ca_cert.cert_pem)
+    vault_cert = base64encode(tls_locally_signed_cert.vault_node_cert.cert_pem)
+    vault_pk   = base64encode(tls_private_key.vault_node_key.private_key_pem)
+  }
+}
+
+locals {
+  secret = jsonencode(local.tls_data)
+}
+
+
+resource "aws_secretsmanager_secret" "vault_tls" {
+  name                    = "${var.component_name}-tls-secret"
+  description             = "contains TLS certs and private keys"
+  kms_key_id              = var.kms_key_id
+  recovery_window_in_days = var.recovery_window
+
+  tags = merge(local.common_tags, tomap({"Name"= "tls-data-${var.component_name}"}))
+}
+
+resource "aws_secretsmanager_secret_version" "vault_tls" {
+  secret_id     = aws_secretsmanager_secret.vault_tls.id
+  secret_string = local.secret
+}
