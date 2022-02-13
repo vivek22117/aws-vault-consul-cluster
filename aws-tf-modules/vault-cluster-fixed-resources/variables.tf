@@ -135,6 +135,19 @@ variable "allowed_uses" {
   ]
 }
 
+variable "kms_key_id" {
+  type        = string
+  description = "Specifies the ARN or ID of the AWS KMS customer master key (CMK) to be used to encrypt the secret values"
+  default     = null
+}
+
+
+variable "recovery_window" {
+  type        = number
+  description = "Specifies the number of days that AWS Secrets Manager waits before it can delete the secret"
+  default     = 0
+}
+
 #####==============Local variables======================#####
 locals {
   common_tags = {
