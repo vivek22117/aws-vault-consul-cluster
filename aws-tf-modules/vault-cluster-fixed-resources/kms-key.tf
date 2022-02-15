@@ -7,5 +7,5 @@ resource "aws_kms_key" "vault_key" {
   is_enabled              = true
   key_usage               = "ENCRYPT_DECRYPT"
 
-  tags = merge(local.common_tags, tomap({"Name"= "${var.environment}-vault-key"}))
+  tags = merge(local.common_tags, tomap({"Name"= "${var.component_name}-vault-key"}))
 }
