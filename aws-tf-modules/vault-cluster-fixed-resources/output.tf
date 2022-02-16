@@ -25,3 +25,16 @@ output "secrets_manager_arn" {
 output "kms_key_arn" {
   value = var.user_supplied_kms_key_arn != null ? var.user_supplied_kms_key_arn : aws_kms_key.vault_key[0].arn
 }
+
+
+output "s3_bucket_vault_license_arn" {
+  value = aws_s3_bucket.vault_license_bucket.arn
+}
+
+output "s3_bucket_vault_license" {
+  value = aws_s3_bucket.vault_license_bucket.id
+}
+
+output "vault_license_name" {
+  value = var.vault_license_name
+}
