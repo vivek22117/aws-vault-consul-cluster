@@ -190,6 +190,23 @@ variable "vault_license_name" {
   default     = "vault.hclic"
 }
 
+#####==========================================Vault LB=======================================#####
+variable "lb_type" {
+  type        = string
+  description = "The type of load balancer to provison: network or application."
+}
+
+variable "allowed_inbound_cidrs" {
+  type        = list(string)
+  description = "List of CIDR blocks to permit inbound traffic from to load balancer"
+  default     = null
+}
+
+variable "vault_cluster_sg_id" {
+  type        = string
+  description = "Security group ID of Vault cluster"
+}
+
 #####==============Local variables======================#####
 locals {
   common_tags = {
