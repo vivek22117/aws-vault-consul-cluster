@@ -14,7 +14,7 @@ data "aws_iam_policy_document" "vault_instance_role_doc" {
 
 
 resource "aws_iam_role" "vault_instance_role" {
-  count              = var.user_supplied_iam_role_name != null ? 0 : 1
+  count = var.user_supplied_iam_role_name != null ? 0 : 1
 
   name_prefix        = "${var.component_name}-vault"
   assume_role_policy = data.aws_iam_policy_document.vault_instance_role_doc.json
@@ -29,7 +29,7 @@ resource "aws_iam_instance_profile" "vault_instance_profile" {
 #          Add IAM Policies to Instance Role                                   #
 ################################################################################
 resource "aws_iam_role_policy" "cloud_auto_join" {
-  count  = var.user_supplied_iam_role_name != null ? 0 : 1
+  count = var.user_supplied_iam_role_name != null ? 0 : 1
 
   name   = "${var.component_name}-vault-auto-join-policy"
   role   = aws_iam_role.vault_instance_role[0].id
@@ -49,7 +49,7 @@ data "aws_iam_policy_document" "cloud_auto_join_policy_doc" {
 }
 
 resource "aws_iam_role_policy" "auto_unseal_s3_license" {
-  count  = var.user_supplied_iam_role_name != null ? 0 : 1
+  count = var.user_supplied_iam_role_name != null ? 0 : 1
 
   name   = "${var.component_name}-vault-auto-unseal-policy"
   role   = aws_iam_role.vault_instance_role[0].id
@@ -73,7 +73,7 @@ data "aws_iam_policy_document" "auto_unseal_s3_license_policy_doc" {
 }
 
 resource "aws_iam_role_policy" "session_manager" {
-  count  = var.user_supplied_iam_role_name != null ? 0 : 1
+  count = var.user_supplied_iam_role_name != null ? 0 : 1
 
   name   = "${var.component_name}-vault-ssm-policy"
   role   = aws_iam_role.vault_instance_role[0].id
@@ -99,7 +99,7 @@ data "aws_iam_policy_document" "session_manager_policy_doc" {
 }
 
 resource "aws_iam_role_policy" "secrets_manager" {
-  count  = var.user_supplied_iam_role_name != null ? 0 : 1
+  count = var.user_supplied_iam_role_name != null ? 0 : 1
 
   name   = "${var.component_name}-vault-secrets-manager-policy"
   role   = aws_iam_role.vault_instance_role[0].id
@@ -121,7 +121,7 @@ data "aws_iam_policy_document" "secrets_manager_policy_doc" {
 }
 
 resource "aws_iam_role_policy" "s3_bucket_vault_license" {
-  count  = var.user_supplied_iam_role_name != null ? 0 : 1
+  count = var.user_supplied_iam_role_name != null ? 0 : 1
 
   name   = "${var.component_name}-vault-license-s3-policy"
   role   = aws_iam_role.vault_instance_role[0].id

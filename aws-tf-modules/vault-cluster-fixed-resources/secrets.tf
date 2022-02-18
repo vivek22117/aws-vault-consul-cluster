@@ -10,12 +10,12 @@ resource "tls_private_key" "vault_ca" {
 # Create a CA cert with the private key you just generated.       #
 ###################################################################
 resource "tls_self_signed_cert" "vault_ca_cert" {
-  key_algorithm   = tls_private_key.vault_ca.algorithm
-  private_key_pem = tls_private_key.vault_ca.private_key_pem
+  key_algorithm     = tls_private_key.vault_ca.algorithm
+  private_key_pem   = tls_private_key.vault_ca.private_key_pem
   is_ca_certificate = true
 
   subject {
-    common_name = var.ca_common_name
+    common_name  = var.ca_common_name
     organization = var.organization_name
   }
 
@@ -36,8 +36,8 @@ resource "tls_self_signed_cert" "vault_ca_cert" {
 # To create the certs on your Vault nodes                          #
 ####################################################################
 resource "tls_private_key" "vault_node_key" {
-  algorithm   = var.private_key_algorithm
-  rsa_bits    = var.private_key_rsa_bits
+  algorithm = var.private_key_algorithm
+  rsa_bits  = var.private_key_rsa_bits
 
   # Store the certificate's private key in a file.
   provisioner "local-exec" {
@@ -104,7 +104,7 @@ resource "aws_secretsmanager_secret" "vault_tls" {
   kms_key_id              = var.kms_key_id
   recovery_window_in_days = var.recovery_window
 
-  tags = merge(local.common_tags, tomap({"Name"= "tls-data-${var.component_name}"}))
+  tags = merge(local.common_tags, tomap({ "Name" = "tls-data-${var.component_name}" }))
 }
 
 resource "aws_secretsmanager_secret_version" "vault_tls" {

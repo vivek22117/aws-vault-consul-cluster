@@ -17,7 +17,7 @@ resource "aws_s3_bucket" "vault_license_bucket" {
 
   force_destroy = true
 
-  tags = merge(local.common_tags, tomap({"Name"= "${var.environment}-vault-license"}))
+  tags = merge(local.common_tags, tomap({ "Name" = "${var.environment}-vault-license" }))
 }
 
 
