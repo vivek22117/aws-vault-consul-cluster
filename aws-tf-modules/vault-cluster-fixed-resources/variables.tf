@@ -212,6 +212,11 @@ variable "lb_subnets" {
   description = "Subnets where load balancer will be deployed"
 }
 
+variable "lb_health_check_path" {
+  type        = string
+  description = "The endpoint to check for Vault's health status."
+}
+
 #####==============Local variables======================#####
 locals {
   common_tags = {

@@ -40,7 +40,7 @@ locals {
   lb_protocol        = var.lb_type == "network" ? "TCP" : "HTTPS"
 }
 
-resource "aws_alb" "vault_lb" {
+resource "aws_alb" "vault_alb" {
   name = "${var.component_name}-vault-lb"
 
   drop_invalid_header_fields = var.lb_type == "application" ? true : null
@@ -49,7 +49,32 @@ resource "aws_alb" "vault_lb" {
   enable_http2               = "true"
   idle_timeout               = 600
   internal                   = true
-  subnets                    = var.lb_subnets
+  subnets                    = data.terraform_remote_state.vpc.outputs.vault_consul_subnets
 
   tags = merge(local.common_tags, tomap({ "Name" = "${var.environment}-vault-lb" }))
+}
+
+resource "aws_lb_target_group" "ecs_alb_default_target_group" {
+  name = "${var.component_name}-vault-tg-${var.environment}"
+
+  port        = 8200
+  protocol    = local.lb_protocol
+  vpc_id      = data.terraform_remote_state.vpc.outputs.vpc_id
+  target_type = "instance"
+
+  tags = {
+    name = "${var.component_name}-tg"
+  }
+
+  health_check {
+    enabled             = true
+    protocol            = "HTTPS"
+    port                = "traffic-port"
+    healthy_threshold   = 5
+    unhealthy_threshold = 5
+    timeout             = 5
+    interval            = 30
+    path                = var.lb_health_check_path
+    matcher             = "200,301,302"
+  }
 }
