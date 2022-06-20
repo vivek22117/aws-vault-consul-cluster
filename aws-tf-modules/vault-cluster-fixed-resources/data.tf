@@ -11,7 +11,5 @@ data "terraform_remote_state" "vpc" {
   }
 }
 
-
-
 # used for accessing Account ID and ARN
 data "aws_caller_identity" "current" {}

@@ -12,30 +12,21 @@ data "aws_iam_policy_document" "vault_instance_role_doc" {
   }
 }
 
-
 resource "aws_iam_role" "vault_instance_role" {
   count = var.user_supplied_iam_role_name != null ? 0 : 1
 
-  name_prefix        = "${var.component_name}-vault"
+  name_prefix        = "${var.environment}-${var.component_name}-role"
   assume_role_policy = data.aws_iam_policy_document.vault_instance_role_doc.json
 }
 
 resource "aws_iam_instance_profile" "vault_instance_profile" {
-  name_prefix = "${var.component_name}-vault"
+  name_prefix = "${var.environment}-${var.component_name}-instance-profile"
   role        = var.user_supplied_iam_role_name != null ? var.user_supplied_iam_role_name : aws_iam_role.vault_instance_role[0].name
 }
 
 ################################################################################
-#          Add IAM Policies to Instance Role                                   #
+#          Add IAM Policies to Vault Instance Role                             #
 ################################################################################
-resource "aws_iam_role_policy" "cloud_auto_join" {
-  count = var.user_supplied_iam_role_name != null ? 0 : 1
-
-  name   = "${var.component_name}-vault-auto-join-policy"
-  role   = aws_iam_role.vault_instance_role[0].id
-  policy = data.aws_iam_policy_document.cloud_auto_join_policy_doc.json
-}
-
 data "aws_iam_policy_document" "cloud_auto_join_policy_doc" {
   statement {
     effect = "Allow"
@@ -47,6 +38,15 @@ data "aws_iam_policy_document" "cloud_auto_join_policy_doc" {
     resources = ["*"]
   }
 }
+
+resource "aws_iam_role_policy" "cloud_auto_join" {
+  count = var.user_supplied_iam_role_name != null ? 0 : 1
+
+  name   = "${var.component_name}-auto-join-policy"
+  role   = aws_iam_role.vault_instance_role[0].id
+  policy = data.aws_iam_policy_document.cloud_auto_join_policy_doc.json
+}
+
 
 resource "aws_iam_role_policy" "auto_unseal_s3_license" {
   count = var.user_supplied_iam_role_name != null ? 0 : 1
