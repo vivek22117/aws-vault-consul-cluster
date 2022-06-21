@@ -3,18 +3,6 @@ data "aws_route53_zone" "public" {
   private_zone = false
 }
 
-# This creates an SSL certificate
-resource "aws_acm_certificate" "vault_cluster_certificate" {
-
-  domain_name               = "${var.cluster_dns}.${var.domain}"
-  subject_alternative_names = ["www.${var.cluster_dns}.${var.domain}"]
-  validation_method         = "DNS"
-
-  lifecycle {
-    create_before_destroy = true
-  }
-}
-
 # This is a DNS record for the ACM certificate validation to prove we own the domain
 resource "aws_route53_record" "cert_validation" {
   depends_on = [aws_acm_certificate.vault_cluster_certificate]
