@@ -1,11 +1,11 @@
 resource "aws_security_group" "vault_lb" {
   count = var.lb_type == "application" ? 1 : 0
 
-  description = "Security group for the application load balancer"
-  name        = "${var.component_name}-vault-lb-sg"
+  description = "Security group for the Vault ALB"
+  name        = "${var.component_name}-lb-sg"
   vpc_id      = data.terraform_remote_state.vpc.outputs.vpc_id
 
-  tags = merge(local.common_tags, tomap({ "Name" = "${var.environment}-lb-sg" }))
+  tags = merge(local.common_tags, tomap({ "Name" = "${var.environment}-${var.component_name}-lb-sg" }))
 }
 
 resource "aws_security_group_rule" "vault_lb_inbound" {
@@ -15,9 +15,9 @@ resource "aws_security_group_rule" "vault_lb_inbound" {
   security_group_id = aws_security_group.vault_lb[0].id
 
   type        = "ingress"
+  protocol    = "tcp"
   from_port   = 8200
   to_port     = 8200
-  protocol    = "tcp"
   cidr_blocks = var.allowed_inbound_cidrs
 }
 
@@ -28,9 +28,9 @@ resource "aws_security_group_rule" "vault_lb_outbound" {
   security_group_id = aws_security_group.vault_lb[0].id
 
   type                     = "egress"
+  protocol                 = "tcp"
   from_port                = 8200
   to_port                  = 8200
-  protocol                 = "tcp"
   source_security_group_id = var.vault_cluster_sg_id
 }
 
@@ -41,7 +41,7 @@ locals {
 }
 
 resource "aws_alb" "vault_alb" {
-  name = "${var.component_name}-vault-lb"
+  name = "${var.component_name}-lb"
 
   drop_invalid_header_fields = var.lb_type == "application" ? true : null
   load_balancer_type         = var.lb_type
@@ -51,10 +51,10 @@ resource "aws_alb" "vault_alb" {
   internal                   = true
   subnets                    = data.terraform_remote_state.vpc.outputs.vault_consul_subnets
 
-  tags = merge(local.common_tags, tomap({ "Name" = "${var.environment}-vault-lb" }))
+  tags = merge(local.common_tags, tomap({ "Name" = "${var.environment}-lb" }))
 }
 
-resource "aws_lb_target_group" "ecs_alb_default_target_group" {
+resource "aws_lb_target_group" "vault_alb_default_target_group" {
   name = "${var.component_name}-vault-tg-${var.environment}"
 
   port        = 8200
@@ -76,5 +76,17 @@ resource "aws_lb_target_group" "ecs_alb_default_target_group" {
     interval            = 30
     path                = var.lb_health_check_path
     matcher             = "200,301,302"
+  }
+}
+
+resource "aws_lb_listener" "vault_lb_listener" {
+  load_balancer_arn = aws_alb.vault_alb.id
+  port              = 8200
+  protocol          = local.lb_protocol
+  certificate_arn   = local.lb_protocol == "HTTPS" ? aws_acm_certificate.vault_cluster_certificate.arn : null
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.vault_alb_default_target_group.arn
   }
 }
