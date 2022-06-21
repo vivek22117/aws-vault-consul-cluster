@@ -77,7 +77,7 @@ resource "tls_locally_signed_cert" "vault_node_cert" {
 
 #############################################################################
 #           Add ACM certificate for Vault                                   #
-
+#############################################################################
 resource "aws_acm_certificate" "vault" {
   private_key       = tls_private_key.vault_node_key.private_key_pem
   certificate_body  = tls_locally_signed_cert.vault_node_cert.cert_pem
@@ -91,9 +91,7 @@ locals {
     vault_cert = base64encode(tls_locally_signed_cert.vault_node_cert.cert_pem)
     vault_pk   = base64encode(tls_private_key.vault_node_key.private_key_pem)
   }
-}
 
-locals {
   secret = jsonencode(local.tls_data)
 }
 
