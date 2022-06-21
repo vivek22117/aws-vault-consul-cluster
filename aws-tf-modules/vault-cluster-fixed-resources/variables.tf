@@ -53,7 +53,7 @@ variable "validity_period_hours" {
 variable "ca_common_name" {
   type        = string
   description = "CA cert common name"
-  default     = "cloud-interview.in"
+  default     = "vault.server.in"
 }
 
 variable "organization_name" {
@@ -113,7 +113,7 @@ variable "ip_addresses" {
 
 variable "common_name" {
   description = "The common name to use in the subject of the certificate (e.g. acme.co cert)."
-  default     = "doubledigit-solutions cert"
+  default     = "vault.server.in"
 }
 
 
@@ -121,7 +121,8 @@ variable "dns_names" {
   description = "List of DNS names for which the certificate will be valid (e.g. vault.service.consul, foo.example.com)."
   type        = list(string)
   default = [
-    "doubledigit-solutions.com"
+    "cloud-interview.in",
+    "localhost"
   ]
 }
 
