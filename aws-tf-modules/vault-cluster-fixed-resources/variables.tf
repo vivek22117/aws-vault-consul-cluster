@@ -17,7 +17,7 @@ variable "owner_team" {
 variable "component_name" {
   type        = string
   description = "Component name for resources"
-  default = "vault-cluster"
+  default     = "vault-cluster"
 }
 
 #####======================DynamoDB Table Variables=========================#####
@@ -53,17 +53,19 @@ variable "validity_period_hours" {
 variable "ca_common_name" {
   type        = string
   description = "CA cert common name"
+  default     = "cloud-interview.in"
 }
 
 variable "organization_name" {
   type        = string
   description = "Organization name for the CA cert"
+  default     = "DoubleDigit Solutions"
 }
 
 ## https://registry.terraform.io/providers/hashicorp/tls/latest/docs/resources/self_signed_cert#allowed_uses
 variable "ca_allowed_uses" {
   description = "List of keywords from RFC5280 describing a use that is permitted for the issued certificate."
-  type        = "list"
+  type        = list(string)
 
   default = [
     "cert_signing",
@@ -103,7 +105,7 @@ variable "owner" {
 
 variable "ip_addresses" {
   description = "List of IP addresses for which the certificate will be valid (e.g. 127.0.0.1)."
-  type        = "list"
+  type        = list(string)
   default = [
     "127.0.0.1"
   ]
@@ -117,7 +119,7 @@ variable "common_name" {
 
 variable "dns_names" {
   description = "List of DNS names for which the certificate will be valid (e.g. vault.service.consul, foo.example.com)."
-  type        = "list"
+  type        = list(string)
   default = [
     "doubledigit-solutions.com"
   ]
@@ -125,7 +127,7 @@ variable "dns_names" {
 
 variable "allowed_uses" {
   description = "List of keywords from RFC5280 describing a use that is permitted for the issued certificate. For more info and the list of keywords, see https://www.terraform.io/docs/providers/tls/r/self_signed_cert.html#allowed_uses."
-  type        = "list"
+  type        = list(string)
 
   default = [
     "client_auth",
@@ -179,6 +181,18 @@ variable "secrets_manager_arn" {
   description = "Secrets manager ARN where TLS cert info is stored"
 }
 
+#####=============================================Route53 Config=======================================#####
+variable "domain" {
+  type        = string
+  description = "Domain name registered with AWS Route 53"
+}
+
+variable "cluster_dns" {
+  type        = string
+  description = "DNS name for the cluster"
+}
+
+
 #####===============================================S3 Bucket Variables=================================#####
 variable "vault_license_filepath" {
   type        = string
@@ -194,7 +208,7 @@ variable "vault_license_name" {
 #####==========================================Vault LB=======================================#####
 variable "lb_type" {
   type        = string
-  description = "The type of load balancer to provison: network or application."
+  description = "The type of load balancer to provision: network or application."
 }
 
 variable "allowed_inbound_cidrs" {
