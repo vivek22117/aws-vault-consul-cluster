@@ -35,3 +35,7 @@ output "s3_bucket_vault_license" {
 output "vault_license_name" {
   value = var.vault_license_name
 }
+
+output "vault_lb_sg" {
+  value = aws_security_group.vault_lb[0].id
+}
