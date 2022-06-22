@@ -47,3 +47,23 @@ variable "vault_version" {
   description = "Vault version"
   default     = "1.8.2"
 }
+
+
+#####=============================================Vault Node Config Variables================================#####
+variable "user_supplied_ami_id" {
+  type        = string
+  description = "AMI ID to use with Vault instances"
+  default     = null
+}
+
+
+
+#####==============Local variables======================#####
+locals {
+  common_tags = {
+    Team        = var.owner_team
+    Environment = var.environment
+    Component   = var.component_name
+  }
+}
+
