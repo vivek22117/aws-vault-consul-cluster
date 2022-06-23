@@ -231,6 +231,13 @@ variable "lb_subnets" {
 variable "lb_health_check_path" {
   type        = string
   description = "The endpoint to check for Vault's health status."
+  default     = "/v1/sys/health?activecode=200&standbycode=200&sealedcode=200&uninitcode=200"
+}
+
+variable "ssl_policy" {
+  type        = string
+  default     = "ELBSecurityPolicy-TLS-1-2-2017-01"
+  description = "SSL policy to use on LB listener"
 }
 
 #####==============Local variables======================#####
