@@ -20,6 +20,10 @@ output "secrets_manager_arn" {
   value       = aws_secretsmanager_secret.vault_tls.arn
 }
 
+output "vault_instance_profile" {
+  value = aws_iam_instance_profile.vault_instance_profile.name
+}
+
 output "kms_key_arn" {
   value = var.user_supplied_kms_key_arn != null ? var.user_supplied_kms_key_arn : aws_kms_key.vault_cluster_key[0].arn
 }
@@ -38,4 +42,8 @@ output "vault_license_name" {
 
 output "vault_lb_sg" {
   value = aws_security_group.vault_lb[0].id
+}
+
+output "vault_lb_target_group_arn" {
+  value = aws_lb_target_group.vault_alb_default_target_group.arn
 }
