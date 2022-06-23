@@ -83,6 +83,7 @@ resource "aws_lb_listener" "vault_lb_listener" {
   load_balancer_arn = aws_alb.vault_alb.id
   port              = 8200
   protocol          = local.lb_protocol
+  ssl_policy        = local.lb_protocol == "HTTPS" ? var.ssl_policy : null
   certificate_arn   = local.lb_protocol == "HTTPS" ? aws_acm_certificate.vault_cluster_certificate.arn : null
 
   default_action {
