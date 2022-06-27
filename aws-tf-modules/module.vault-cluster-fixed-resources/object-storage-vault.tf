@@ -9,7 +9,7 @@ resource "aws_s3_bucket" "vault_license_bucket" {
   server_side_encryption_configuration {
     rule {
       apply_server_side_encryption_by_default {
-        kms_master_key_id = aws_kms_key.vault_key.arn
+        kms_master_key_id = aws_kms_key.vault_cluster_key.arn
         sse_algorithm     = "aws:kms"
       }
     }
