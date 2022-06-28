@@ -24,10 +24,10 @@ resource "tls_self_signed_cert" "vault_ca_cert" {
   allowed_uses = [var.ca_allowed_uses]
 
 
-  # Store the CA public key in a file.
-  provisioner "local-exec" {
-    command = "echo '${tls_self_signed_cert.vault_ca_cert.cert_pem}' > '${var.ca_public_key_file_path}' && chmod ${var.permissions} '${var.ca_public_key_file_path}' && chown ${var.owner} '${var.ca_public_key_file_path}'"
-  }
+  //  # Store the CA public key in a file.
+  //  provisioner "local-exec" {
+  //    command = "echo '${tls_self_signed_cert.vault_ca_cert.cert_pem}' > '${var.ca_public_key_file_path}' && chmod ${var.permissions} '${var.ca_public_key_file_path}' && chown ${var.owner} '${var.ca_public_key_file_path}'"
+  //  }
 }
 
 
@@ -39,10 +39,10 @@ resource "tls_private_key" "vault_node_key" {
   algorithm = var.private_key_algorithm
   rsa_bits  = var.private_key_rsa_bits
 
-  # Store the certificate's private key in a file.
-  provisioner "local-exec" {
-    command = "echo '${tls_private_key.vault_node_key.private_key_pem}' > '${var.private_key_file_path}' && chmod ${var.permissions} '${var.private_key_file_path}' && chown ${var.owner} '${var.private_key_file_path}'"
-  }
+  //  # Store the certificate's private key in a file.
+  //  provisioner "local-exec" {
+  //    command = "echo '${tls_private_key.vault_node_key.private_key_pem}' > '${var.private_key_file_path}' && chmod ${var.permissions} '${var.private_key_file_path}' && chown ${var.owner} '${var.private_key_file_path}'"
+  //  }
 }
 
 resource "tls_cert_request" "vault_node_cert" {
@@ -69,10 +69,10 @@ resource "tls_locally_signed_cert" "vault_node_cert" {
   validity_period_hours = var.validity_period_hours
   allowed_uses          = [var.allowed_uses]
 
-  # Store the certificate's public key in a file.
-  provisioner "local-exec" {
-    command = "echo '${tls_locally_signed_cert.vault_node_cert.cert_pem}' > '${var.public_key_file_path}' && chmod ${var.permissions} '${var.public_key_file_path}' && chown ${var.owner} '${var.public_key_file_path}'"
-  }
+  //  # Store the certificate's public key in a file.
+  //  provisioner "local-exec" {
+  //    command = "echo '${tls_locally_signed_cert.vault_node_cert.cert_pem}' > '${var.public_key_file_path}' && chmod ${var.permissions} '${var.public_key_file_path}' && chown ${var.owner} '${var.public_key_file_path}'"
+  //  }
 }
 
 #############################################################################
