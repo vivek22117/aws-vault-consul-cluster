@@ -17,7 +17,6 @@ variable "owner_team" {
 variable "component_name" {
   type        = string
   description = "Component name for resources"
-  default     = "vault-cluster"
 }
 
 #####======================DynamoDB Table Variables=========================#####
@@ -35,13 +34,11 @@ variable "write_capacity" {
 variable "private_key_algorithm" {
   type        = string
   description = "The name of the algorithm to use for private keys. Must be one of: RSA or ECDSA."
-  default     = "RSA"
 }
 
 variable "private_key_rsa_bits" {
   type        = string
   description = "The size of the generated RSA key in bits. Should only be used if var.private_key_algorithm is RSA."
-  default     = "2048"
 }
 
 variable "validity_period_hours" {
@@ -53,103 +50,78 @@ variable "validity_period_hours" {
 variable "ca_common_name" {
   type        = string
   description = "CA cert common name"
-  default     = "vault.server.in"
 }
 
 variable "organization_name" {
   type        = string
   description = "Organization name for the CA cert"
-  default     = "DoubleDigit Solutions"
 }
 
 ## https://registry.terraform.io/providers/hashicorp/tls/latest/docs/resources/self_signed_cert#allowed_uses
 variable "ca_allowed_uses" {
   description = "List of keywords from RFC5280 describing a use that is permitted for the issued certificate."
   type        = list(string)
-
-  default = [
-    "cert_signing",
-    "key_encipherment",
-    "digital_signature",
-  ]
 }
+//
+//variable "ca_public_key_file_path" {
+//  type        = string
+//  description = "Write the PEM-encoded CA certificate public key to this path (e.g. /etc/tls/ca.crt.pem)."
+//  default     = "tls/ca.crt.pem"
+//}
+//
+//variable "public_key_file_path" {
+//  type        = string
+//  description = "Write the PEM-encoded certificate public key to this path (e.g. /etc/tls/vault.crt.pem)."
+//  default     = "tls/vault.crt.pem"
+//}
+//
+//variable "private_key_file_path" {
+//  type        = string
+//  description = "Write the PEM-encoded certificate private key to this path (e.g. /etc/tls/vault.key.pem)."
+//  default     = "tls/vault.key.pem"
+//}
 
-variable "ca_public_key_file_path" {
-  type        = string
-  description = "Write the PEM-encoded CA certificate public key to this path (e.g. /etc/tls/ca.crt.pem)."
-  default     = "tls/ca.crt.pem"
-}
-
-variable "public_key_file_path" {
-  type        = string
-  description = "Write the PEM-encoded certificate public key to this path (e.g. /etc/tls/vault.crt.pem)."
-  default     = "tls/vault.crt.pem"
-}
-
-variable "private_key_file_path" {
-  type        = string
-  description = "Write the PEM-encoded certificate private key to this path (e.g. /etc/tls/vault.key.pem)."
-  default     = "tls/vault.key.pem"
-}
-
-variable "permissions" {
-  type        = string
-  description = "The Unix file permission to assign to the cert files (e.g. 0600)."
-  default     = "0600"
-}
-
-variable "owner" {
-  description = "The OS user who should be given ownership over the certificate files."
-  default     = "vivekm"
-}
+//variable "permissions" {
+//  type        = string
+//  description = "The Unix file permission to assign to the cert files (e.g. 0600)."
+//  default     = "0600"
+//}
+//
+//variable "owner" {
+//  description = "The OS user who should be given ownership over the certificate files."
+//  default     = "vivekm"
+//}
 
 variable "ip_addresses" {
   description = "List of IP addresses for which the certificate will be valid (e.g. 127.0.0.1)."
   type        = list(string)
-  default = [
-    "127.0.0.1"
-  ]
 }
 
 variable "common_name" {
+  type        = string
   description = "The common name to use in the subject of the certificate (e.g. acme.co cert)."
-  default     = "vault.server.in"
 }
 
 
 variable "dns_names" {
   description = "List of DNS names for which the certificate will be valid (e.g. vault.service.consul, foo.example.com)."
   type        = list(string)
-  default = [
-    "cloud-interview.in",
-    "localhost"
-  ]
 }
 
 variable "allowed_uses" {
   description = "List of keywords from RFC5280 describing a use that is permitted for the issued certificate. For more info and the list of keywords, see https://www.terraform.io/docs/providers/tls/r/self_signed_cert.html#allowed_uses."
   type        = list(string)
-
-  default = [
-    "client_auth",
-    "digital_signature",
-    "key_agreement",
-    "key_encipherment",
-    "server_auth",
-  ]
 }
 
 variable "kms_key_id" {
   type        = string
   description = "Specifies the ARN or ID of the AWS KMS customer master key (CMK) to be used to encrypt the secret values"
-  default     = null
 }
 
 
 variable "recovery_window" {
   type        = number
   description = "Specifies the number of days that AWS Secrets Manager waits before it can delete the secret"
-  default     = 0
 }
 
 #####=======================================KMS Key Variables===========================#####
@@ -161,7 +133,6 @@ variable "kms_key_deletion_window" {
 variable "user_supplied_kms_key_arn" {
   type        = string
   description = "(OPTIONAL) User-provided KMS key ARN. Providing this will disable the KMS submodule from generating a KMS key used for Vault auto-unseal"
-  default     = null
 }
 
 
@@ -169,12 +140,6 @@ variable "user_supplied_kms_key_arn" {
 variable "user_supplied_iam_role_name" {
   type        = string
   description = "This will be used for the instance profile provided to the AWS launch configuration. The minimum permissions must match the defaults generated by the IAM submodule for cloud auto-join and auto-unseal."
-  default     = null
-}
-
-variable "aws_bucket_vault_license_arn" {
-  type        = string
-  description = "ARN of S3 bucket with Vault license"
 }
 
 variable "secrets_manager_arn" {
