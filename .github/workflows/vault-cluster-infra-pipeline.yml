@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       logLevel:
-        description: 'CloudTrail resources infra'
+        description: 'Vault Cluster resources infra'
         required: false
         default: 'initiate'
       action:
@@ -17,13 +17,13 @@ on:
 
 env:
   tf_version: '0.13.5'
-  tf_working_dir_app: './deployment/cloudtrail/'
+  tf_working_dir_app: './deployment/vault-cluster-fixed-resources/'
   aws_region: 'us-east-1'
   environment: ${{ github.event.inputs.env }}
 
 jobs:
   terraform:
-    name: '${{ github.event.inputs.action }}-CloudTrail-Resources'
+    name: '${{ github.event.inputs.action }}-Vault-Cluster-Resources'
     runs-on: ubuntu-latest
 
     defaults:
