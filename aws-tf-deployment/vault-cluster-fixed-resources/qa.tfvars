@@ -14,6 +14,11 @@ validity_period_hours = "755"
 ca_common_name        = "vault.server.in"
 organization_name     = "DoubleDigit Solutions"
 
+lb_type = "application"
+allowed_inbound_cidrs = [
+  "0.0.0.0/0"
+]
+
 ca_allowed_uses = [
   "cert_signing",
   "key_encipherment",
