@@ -32,6 +32,11 @@ output "vault_lb_sg" {
   value = aws_security_group.vault_lb[0].id
 }
 
+output "vault_cluster_sg" {
+  value = aws_security_group.vault_cluster_sg.id
+}
+
+
 output "vault_lb_target_group_arn" {
   value = aws_lb_target_group.vault_alb_default_target_group.arn
 }
