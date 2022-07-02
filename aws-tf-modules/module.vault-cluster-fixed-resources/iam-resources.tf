@@ -27,7 +27,7 @@ resource "aws_iam_instance_profile" "vault_instance_profile" {
 ################################################################################
 #          Add IAM Policies to Vault Instance Role                             #
 ################################################################################
-data "aws_iam_policy_document" "cloud_auto_join_policy_doc" {
+data "aws_iam_policy_document" "vault_auto_join_policy_doc" {
   statement {
     effect = "Allow"
 
@@ -39,12 +39,12 @@ data "aws_iam_policy_document" "cloud_auto_join_policy_doc" {
   }
 }
 
-resource "aws_iam_role_policy" "cloud_auto_join" {
+resource "aws_iam_role_policy" "vault_auto_join" {
   count = var.user_supplied_iam_role_name != null ? 0 : 1
 
-  name   = "${var.component_name}-auto-join-policy"
+  name   = "${var.component_name}-vault-join-policy"
   role   = aws_iam_role.vault_instance_role[0].id
-  policy = data.aws_iam_policy_document.cloud_auto_join_policy_doc.json
+  policy = data.aws_iam_policy_document.vault_auto_join_policy_doc.json
 }
 
 
