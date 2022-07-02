@@ -37,7 +37,6 @@ allowed_uses = [
   "server_auth",
 ]
 
-kms_key_id                  = null
 recovery_window             = 0
 kms_key_deletion_window     = 7
 user_supplied_kms_key_arn   = null
