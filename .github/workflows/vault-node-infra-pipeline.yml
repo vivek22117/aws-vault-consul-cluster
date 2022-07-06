@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       logLevel:
-        description: 'Vault Cluster resources infra'
+        description: 'Vault Nodes resources infra'
         required: false
         default: 'initiate'
       action:
@@ -17,7 +17,7 @@ on:
 
 env:
   tf_version: '0.13.5'
-  tf_working_dir_app: './aws-tf-deployment/vault-cluster-fixed-resources/'
+  tf_working_dir_app: './aws-tf-deployment/vault-nodes/'
   aws_region: 'us-east-1'
   environment: ${{ github.event.inputs.env }}
 
@@ -62,7 +62,7 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
 
-      - name: Terraform Init For Vault-Cluster Resources
+      - name: Terraform Init For Vault Nodes Resources
         uses: hashicorp/terraform-github-actions@master
         with:
           tf_actions_version: ${{ env.tf_version }}
@@ -80,7 +80,7 @@ jobs:
           tf_actions_working_dir: ${{ env.tf_working_dir_app }}
           tf_actions_comment: false
 
-      - name: Terraform Plan Vault-Cluster Resources
+      - name: Terraform Plan Vault Nodes Resources
         if: github.event.inputs.action == 'Create'
         id: app-plan
         uses: hashicorp/terraform-github-actions@master
@@ -91,7 +91,7 @@ jobs:
           tf_actions_subcommand: 'plan'
           args: '-var="environment=${{ env.environment }}" -var-file="${{ env.environment }}.tfvars"'
 
-      - name: Terraform Apply For Vault-Cluster Resources
+      - name: Terraform Apply For Vault Nodes Resources
         if: steps.app-plan.outputs.tf_actions_plan_has_changes == 'true' && github.event.inputs.action == 'Create'
         uses: hashicorp/terraform-github-actions@master
         with:
@@ -102,7 +102,7 @@ jobs:
           args: '-auto-approve -var="environment=${{ env.environment }}" -var-file="${{ env.environment }}.tfvars"'
 
 
-      - name: Terraform Destroy For Vault-Cluster Resources
+      - name: Terraform Destroy For Vault Nodes Resources
         if: github.event.inputs.action == 'Destroy'
         uses: hashicorp/terraform-github-actions@master
         with:
