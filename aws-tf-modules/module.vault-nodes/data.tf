@@ -16,7 +16,7 @@ data "aws_ami" "ubuntu_ami" {
 }
 
 ###################################################
-# Fetch remote state for S3 deployment bucket     #
+# Fetch remote state vault fixed resources        #
 ###################################################
 data "terraform_remote_state" "vault_resources" {
   backend = "s3"
